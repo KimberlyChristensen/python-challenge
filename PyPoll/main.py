@@ -37,16 +37,10 @@ with open(election_data) as csvfile:
 		
 
 #  The percentage of votes each candidate won, formatted as a percentage:
-vote_pct_1 = ((votes[candidate_list[0]]/total_votes)*100)
-vote_pct_2 = ((votes[candidate_list[1]]/total_votes)*100)
-vote_pct_3 = ((votes[candidate_list[2]]/total_votes)*100)
-vote_pct_4 = ((votes[candidate_list[3]]/total_votes)*100)
+vote_pcts = {}
+for candidate in candidate_list:
+	vote_pcts[candidate] = (votes[candidate]/total_votes)*100
 
-vote_pcts = {candidate_list[0]: int(vote_pct_1),
-	candidate_list[1]: int(vote_pct_2),
-	candidate_list[2]: int(vote_pct_3),
-	candidate_list[3]: int(vote_pct_4)
-	}
 
 #  Winner is determined as candidate with highest percentage of votes:
 winner = max(vote_pcts, key=vote_pcts.get)
@@ -55,18 +49,16 @@ winner = max(vote_pcts, key=vote_pcts.get)
 #  Output is saved to external file
 
 analysis_file = os.path.join('analysis', 'analysis_file.txt')
-with open (analysis_file, "w", newline = "") as outfile:
-	print ("Election Results",file = outfile)
-	print ("----------------------------", file = outfile)
-	print (f'Total Votes: {total_votes}', file = outfile)
-	print ("----------------------------", file = outfile)
-	print (f'{candidate_list[0]}: {vote_pct_1: .3f}% ({votes[candidate_list[0]]})', file = outfile)
-	print (f'{candidate_list[1]}: {vote_pct_2: .3f}% ({votes[candidate_list[1]]})', file = outfile)
-	print (f'{candidate_list[2]}: {vote_pct_3: .3f}% ({votes[candidate_list[2]]})', file = outfile)
-	print (f'{candidate_list[3]}: {vote_pct_4: .3f}% ({votes[candidate_list[3]]})', file = outfile)
-	print ("----------------------------", file = outfile)
-	print (f'Winner: {winner}', file = outfile)
-	print ("----------------------------", file = outfile)
+with open(analysis_file, "w", newline = "") as outfile:
+    print("Election Results",file = outfile)
+    print("----------------------------", file = outfile)
+    print(f'Total Votes: {total_votes}', file = outfile)
+    print("----------------------------", file = outfile)
+    for candidate in candidate_list:
+        print (f'{candidate}: {vote_pcts[candidate]: .3f}% ({votes[candidate]})', file = outfile)
+    print("----------------------------", file = outfile)
+    print(f'Winner: {winner}', file = outfile)
+    print("----------------------------", file = outfile)
 
 
 with open(analysis_file, "r", newline = "") as outfile:
